@@ -1,0 +1,57 @@
+<?php echo $this->doctype(); ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <?php 
+	# Title
+	echo $this->headTitle(); 
+        
+	# Meta data
+	echo $this->headMeta()
+                            ->appendHttpEquiv('Content-Type', 'text/html; charset=UTF-8')
+                            ->appendHttpEquiv('Content-Language', 'en-US');
+        
+	# CSS
+	echo $this->headLink()
+                            ->appendStylesheet($this->baseUrl() . '/css/common.css');
+        
+	# Javascript
+	echo $this->headScript()
+                                    ->appendFile($this->baseUrl() . '/js/jquery.js', 'text/javascript')
+                                    ->appendFile($this->baseUrl() . '/js/common.js', 'text/javascript');
+        ?>
+    </head>
+    <body>
+        <?php echo '<!-- Mode: ' . APPLICATION_ENV . ' mode -->'; ?>
+        <div id="page">
+            <h1>Website</h1>
+            <ul id="navigation">
+                <?php
+                if (Zend_Auth::getInstance()->hasIdentity()) {
+                    echo '<li class="details">Welcome ' . Zend_Auth::getInstance()->getIdentity()->getName() . ' </li>';
+                    echo '<li><a href="' . $this->url(array('module' => 'auth', 'controller' => 'account', 'action' => 'event'), null, true) . '">History</a></li>';
+                    echo '<li><a href="' . $this->url(array('module' => 'auth', 'controller' => 'password', 'action' => 'update'), null, true) . '">Update Password</a></li>';
+                    echo '<li><a href="' . $this->url(array('module' => 'auth', 'controller' => 'logout', 'action' => 'index'), null, true) . '">Logout</a></li>';
+                }
+                else {
+                    echo '<li><a href="' . $this->url(array('module' => 'auth', 'controller' => 'login', 'action' => 'index'), null, true) . '">Login</a></li>';
+                    echo '<li><a href="' . $this->url(array('module' => 'auth', 'controller' => 'password', 'action' => 'forgot'), null, true) . '">Forgot password</a></li>';
+                    echo '<li><a href="' . $this->url(array('module' => 'auth', 'controller' => 'register', 'action' => 'index'), null, true) . '">Register</a></li>';
+                }
+                ?>
+            </ul>
+            
+            <div id="main">
+                <?php echo !empty($this->alert) ? '<div class="error">' . implode('<br />', $this->alert) .'</div>' : null; ?>
+                <?php echo $this->layout()->content; ?>
+            </div>
+            
+            <div id="footer">
+                <a href="http://build.jaoudestudios.com">Latest Demo</a> |
+                <a href="http://build.jaoudestudios.com:8080">Jenkins Builds</a> |
+                <a href="http://build.jaoudestudios.com/build">Build Docs</a>  |
+                <a href="http://build.jaoudestudios.com/build/coverage">Test Code Coverage</a>  
+            </div>
+
+        </div>
+    </body>
+</html>
